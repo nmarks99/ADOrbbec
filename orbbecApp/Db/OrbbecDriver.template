@@ -1,0 +1,43 @@
+include "ADBase.template"
+
+record(stringin, "$(P)$(R)DeviceSelector_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT),0,$(TIMEOUT=1))ORBBEC_DEVICE_SELECTOR")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin, "$(P)$(R)DeviceUID_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT),0,$(TIMEOUT=1))ORBBEC_DEVICE_UID")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin, "$(P)$(R)DeviceIP_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT),0,$(TIMEOUT=1))ORBBEC_DEVICE_IP")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin, "$(P)$(R)ConnectionType_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT),0,$(TIMEOUT=1))ORBBEC_CONNECTION_TYPE")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)$(R)DeviceVID_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(PORT),0,$(TIMEOUT=1))ORBBEC_DEVICE_VID")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)$(R)DevicePID_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(PORT),0,$(TIMEOUT=1))ORBBEC_DEVICE_PID")
+    field(SCAN, "I/O Intr")
+}
+
+record(stringin, "$(P)$(R)LastError_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT),0,$(TIMEOUT=1))ORBBEC_LAST_ERROR")
+    field(SCAN, "I/O Intr")
+}
