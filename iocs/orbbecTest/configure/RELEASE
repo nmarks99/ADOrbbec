@@ -4,15 +4,11 @@
 ##############################################################################
 
 ADORBBEC = $(TOP)/../..
-ORBBEC_SDK = /home/beams/NMARKS/devel/orbbec/OrbbecSDK_v2
 # ASYN =
 # CALC =
 # LUA =
 # STD =
 # BUSY =
-
-# optionall include motor if you'd like to use softMotors
-# MOTOR =
 
 # These lines allow developers to override these RELEASE settings
 # without having to modify this file directly.

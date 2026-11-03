@@ -73,3 +73,28 @@
 [11/02 15:56:26.218364][warning][280196][PropertyConfigHandler.hpp:53] Unsupported property '277', skipping getting, return nullvalue
 [11/02 15:56:26.218542][warning][280196][PresetHandler.cpp:336] Exporting ROI property '1060' while stream is not active; the value may differ from what will be applied after streaming starts
 [11/02 15:56:26.219167][info][280196][DeviceManager.cpp:199] Device created successfully! Name: Gemini 335Le, PID: 0x080e, SN/ID: CPEB46300012 FW: 1.6.00
+[11/03 12:11:30.155630][info][853262][HostTimestampProvider.cpp:36] Update clock type to: realtime(0)
+[11/03 12:11:30.156131][info][853262][LinuxUsbPal.cpp:334] Create PollingDeviceWatcher!
+[11/03 12:11:30.156139][info][853262][DeviceManager.cpp:25] Current found device(s): (0)
+[11/03 12:11:30.156143][info][853262][DeviceManager.cpp:488] Enable net device enumeration: true
+[11/03 12:11:31.162383][info][853262][DeviceManager.cpp:25] Current device(s) list: (1)
+[11/03 12:11:31.162403][info][853262][DeviceManager.cpp:29] 	- Name: Gemini 335Le, PID: 0x080e, SN/ID: CPEB46300012, Connection: Ethernet, MAC:54:14:FD:24:61:79, ip:164.54.104.159
+[11/03 12:11:31.162589][warning][853262][GvcpCcpController.cpp:137] [CPEB46300012] Current firmware version is 1.6.00, which is < the minimum required version 1.6.07. CCP is not supported
+[11/03 12:11:31.164576][info][853262][DeviceBase.cpp:833] key: AppSlot,value:1
+[11/03 12:11:31.164586][info][853262][DeviceBase.cpp:833] key: HwType,value:L2
+[11/03 12:11:31.164588][info][853262][DeviceBase.cpp:833] key: HwVer,value:V1.1
+[11/03 12:11:31.164597][info][853262][DeviceBase.cpp:833] key: IspFwVer,value:20250930
+[11/03 12:11:31.164599][info][853262][DeviceBase.cpp:833] key: IspNeedVer,value:20250930
+[11/03 12:11:31.164601][info][853262][DeviceBase.cpp:833] key: PresetVer,value:1.2.5
+[11/03 12:11:31.325475][warning][853262][PropertyServer.cpp:55] [CPEB46300012] Property not found to register callback, propertyId: 277
+[11/03 12:11:31.326157][warning][853262][PropertyConfigHandler.hpp:53] Unsupported property '141', skipping getting, return nullvalue
+[11/03 12:11:31.331799][warning][853262][ObRTPUDPClient.cpp:51] SO_RCVBUF configuration failed. Current buffer size=212992 bytes, RTP streaming requires at least 134217728 bytes(128MB) receive buffer. Please increase the system UDP receive buffer limit.
+[11/03 12:11:31.337540][warning][853262][PropertyConfigHandler.hpp:94] Exporting property '190' while stream is not active; the value may differ from what will be applied after streaming starts
+[11/03 12:11:31.339327][warning][853262][PresetHandler.cpp:336] Exporting ROI property '1061' while stream is not active; the value may differ from what will be applied after streaming starts
+[11/03 12:11:31.340067][warning][853262][PresetHandler.cpp:710] Exporting disparity search properties while stream is not active; the values may differ from what will be applied after streaming starts
+[11/03 12:11:31.345635][warning][853262][ObRTPUDPClient.cpp:51] SO_RCVBUF configuration failed. Current buffer size=212992 bytes, RTP streaming requires at least 134217728 bytes(128MB) receive buffer. Please increase the system UDP receive buffer limit.
+[11/03 12:11:31.383854][warning][853262][PropertyConfigHandler.hpp:94] Exporting property '189' while stream is not active; the value may differ from what will be applied after streaming starts
+[11/03 12:11:31.385972][warning][853262][PropertyConfigHandler.hpp:53] Unsupported property '259', skipping getting, return nullvalue
+[11/03 12:11:31.385993][warning][853262][PropertyConfigHandler.hpp:53] Unsupported property '277', skipping getting, return nullvalue
+[11/03 12:11:31.386185][warning][853262][PresetHandler.cpp:336] Exporting ROI property '1060' while stream is not active; the value may differ from what will be applied after streaming starts
+[11/03 12:11:31.387156][info][853262][DeviceManager.cpp:199] Device created successfully! Name: Gemini 335Le, PID: 0x080e, SN/ID: CPEB46300012 FW: 1.6.00

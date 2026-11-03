@@ -5,7 +5,8 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS AFTER THIS LINE
 #=============================
 
-# urRobot requires C++17 (std::optional)
+# TODO: does it?
+# Requires C++17
 HAS_CXX17 := $(shell $(CXX) -std=c++17 -fsyntax-only -x c++ /dev/null 2>/dev/null && echo YES || echo NO)
 USR_CXXFLAGS += -std=c++17
 
@@ -39,11 +40,6 @@ ifdef ADCORE
   -include $(ADCORE)/ADApp/commonDriverMakefile
 endif
 
-ifdef ADURL
-  $(DBD_NAME)_DBD += URLDriverSupport.dbd
-  $(PROD_NAME)_LIBS := URLDriver $($(PROD_NAME)_LIBS)
-endif
-
 ifdef ASYN
   $(DBD_NAME)_DBD += asyn.dbd
   $(DBD_NAME)_DBD += drvAsynSerialPort.dbd drvAsynIPPort.dbd drvVxi11.dbd devGpib.dbd
@@ -71,8 +67,8 @@ ifdef CALC
 endif
 
 ifdef ADORBBEC
-  $(DBD_NAME)_DBD += OrbbecDriverSupport.dbd
-  $(PROD_NAME)_LIBS := OrbbecDriver $($(PROD_NAME)_LIBS)
+  $(DBD_NAME)_DBD += orbbecSupport.dbd
+  $(PROD_NAME)_LIBS := ADOrbbec $($(PROD_NAME)_LIBS)
   OrbbecSDK_DIR = $(ORBBEC_SDK)/build/linux_x86_64/lib
   $(PROD_NAME)_LIBS += OrbbecSDK
 endif

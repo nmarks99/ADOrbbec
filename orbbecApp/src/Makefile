@@ -1,10 +1,10 @@
 TOP=../..
 include $(TOP)/configure/CONFIG
 
-LIBRARY_IOC += OrbbecDriver
+LIBRARY_IOC += ADOrbbec
 LIB_SRCS += orbbec_driver.cpp
 
-DBD += OrbbecDriverSupport.dbd
+DBD += orbbecSupport.dbd
 
 USR_INCLUDES += -I$(ORBBEC_SDK)/include -I$(ORBBEC_SDK)/build/src/generated
 USR_LDFLAGS += -L$(ORBBEC_SDK)/build/linux_x86_64/lib

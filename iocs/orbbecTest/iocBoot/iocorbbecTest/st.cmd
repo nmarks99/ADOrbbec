@@ -9,7 +9,7 @@ epicsEnvSet("PREFIX", "orbbecTest:")
 
 epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(EPICS_DB_INCLUDE_PATH=.):$(ADCORE)/db")
 OrbbecConfig("ORBBEC1", "164.54.104.159", 0, 0, 0, 0)
-dbLoadRecords("$(ADORBBEC)/db/OrbbecDriver.template", "P=$(PREFIX),R=cam1:,PORT=ORBBEC1")
+dbLoadRecords("$(ADORBBEC)/db/ADOrbbec.template", "P=$(PREFIX),R=cam1:,PORT=ORBBEC1")
 
 ###############################################################################
 iocInit
