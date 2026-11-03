@@ -69,7 +69,7 @@ endif
 ifdef ADORBBEC
   $(DBD_NAME)_DBD += orbbecSupport.dbd
   $(PROD_NAME)_LIBS := ADOrbbec $($(PROD_NAME)_LIBS)
-  OrbbecSDK_DIR = $(ORBBEC_SDK)/build/linux_x86_64/lib
+  OrbbecSDK_DIR = $(ORBBEC_SDK)/lib
   $(PROD_NAME)_LIBS += OrbbecSDK
 endif
 

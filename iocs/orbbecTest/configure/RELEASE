@@ -4,6 +4,7 @@
 ##############################################################################
 
 ADORBBEC = $(TOP)/../..
+ORBBEC_SDK = $(ADORBBEC)/orbbecSupport/OrbbecSDK_v2/build/install
 # ASYN =
 # CALC =
 # LUA =
