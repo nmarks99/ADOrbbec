@@ -15,3 +15,5 @@ O.*/
 *.swp
 .cache/
 compile_commands.json
+.loglogin
+Log/
