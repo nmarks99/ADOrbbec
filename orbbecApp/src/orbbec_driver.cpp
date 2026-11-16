@@ -16,6 +16,7 @@
 #include "ADDriver.h"
 #include <libobsensor/hpp/Context.hpp>
 #include <libobsensor/hpp/Device.hpp>
+#include <libobsensor/hpp/TypeHelper.hpp>
 #include <libobsensor/hpp/Version.hpp>
 
 #include "orbbec_driver.hpp"
@@ -23,29 +24,8 @@
 static const char* driver_name = "OrbbecDriver";
 static const char* driver_version = "0.1.0";
 
-// class OrbbecDriver : public ADDriver {
-  // public:
-    // OrbbecDriver(const char* port_name, const char* device_id, int max_buffers, size_t max_memory,
-                 // int priority, int stack_size);
-//
-    // void report(FILE* fp, int details) override;
-//
-  // protected:
-    // int device_selector_;
-    // int device_uid_;
-    // int device_ip_;
-    // int connection_type_;
-    // int device_vid_;
-    // int device_pid_;
-    // int last_error_;
-//
-  // private:
-    // asynStatus connect_device(const char* device_id);
-    // void set_error(const std::string& message);
-//
-    // std::shared_ptr<ob::Context> context_;
-    // std::shared_ptr<ob::Device> device_;
-// };
+constexpr int COLOR_ADDR = 0;
+constexpr int DEPTH_ADDR = 1;
 
 void OrbbecDriver::set_error(const std::string& message) {
     setIntegerParam(ADAcquire, 0);
@@ -59,41 +39,168 @@ void OrbbecDriver::acquisition_task_c(void* driver) {
     static_cast<OrbbecDriver*>(driver)->acquisition_task();
 }
 
-asynStatus OrbbecDriver::publish_depth_frame(const std::shared_ptr<ob::DepthFrame>& frame) {
+static bool valid_dimensions(size_t width, size_t height, size_t bytes_per_pixel) {
+    const size_t int_max = static_cast<size_t>(std::numeric_limits<int>::max());
+    return width != 0 && height != 0 && width <= int_max && height <= int_max &&
+           width <= std::numeric_limits<size_t>::max() / height &&
+           width * height <= int_max / bytes_per_pixel;
+}
+
+static bool rgb_convert_type(OBFormat format, OBConvertFormat* type) {
+    switch (format) {
+    case OB_FORMAT_YUYV:
+        *type = FORMAT_YUYV_TO_RGB;
+        return true;
+    case OB_FORMAT_UYVY:
+        *type = FORMAT_UYVY_TO_RGB;
+        return true;
+    case OB_FORMAT_I420:
+        *type = FORMAT_I420_TO_RGB;
+        return true;
+    case OB_FORMAT_NV12:
+        *type = FORMAT_NV12_TO_RGB;
+        return true;
+    case OB_FORMAT_NV21:
+        *type = FORMAT_NV21_TO_RGB;
+        return true;
+    case OB_FORMAT_MJPG:
+        *type = FORMAT_MJPG_TO_RGB;
+        return true;
+    case OB_FORMAT_BGR:
+        *type = FORMAT_BGR_TO_RGB;
+        return true;
+    case OB_FORMAT_RGBA:
+        *type = FORMAT_RGBA_TO_RGB;
+        return true;
+    default:
+        return false;
+    }
+}
+
+static std::string format_name(OBFormat format) { return ob::TypeHelper::convertOBFormatTypeToString(format); }
+
+void OrbbecDriver::add_frame_attributes(NDArray* array, const std::shared_ptr<ob::Frame>& frame,
+                                        OBFormat source_format, NDColorMode_t color_mode) {
+    getAttributes(array->pAttributeList);
+    epicsUInt64 frame_index = frame->getIndex();
+    epicsUInt64 device_timestamp = frame->getTimeStampUs();
+    epicsUInt64 system_timestamp = frame->getSystemTimeStampUs();
+    epicsInt32 pixel_format = static_cast<epicsInt32>(source_format);
+    epicsInt32 nd_color_mode = color_mode;
+    array->pAttributeList->add("ColorMode", "Color mode", NDAttrInt32, &nd_color_mode);
+    array->pAttributeList->add("OrbbecFrameIndex", "Orbbec SDK frame index", NDAttrUInt64, &frame_index);
+    array->pAttributeList->add("OrbbecDeviceTimestampUs", "Device timestamp in microseconds", NDAttrUInt64,
+                               &device_timestamp);
+    array->pAttributeList->add("OrbbecSystemTimestampUs", "Host timestamp in microseconds", NDAttrUInt64,
+                               &system_timestamp);
+    array->pAttributeList->add("OrbbecPixelFormat", "Orbbec SDK source pixel format", NDAttrInt32,
+                               &pixel_format);
+}
+
+NDArray* OrbbecDriver::make_color_array(const std::shared_ptr<ob::ColorFrame>& color_frame,
+                                        const std::shared_ptr<ob::Frame>& color_rgb) {
+    if (color_rgb->getFormat() != OB_FORMAT_RGB) {
+        set_error("Color frame was not converted to RGB: " + format_name(color_rgb->getFormat()));
+        return nullptr;
+    }
+
+    const size_t width = color_frame->getWidth();
+    const size_t height = color_frame->getHeight();
+    if (!valid_dimensions(width, height, 3)) {
+        set_error("Invalid color frame dimensions");
+        return nullptr;
+    }
+
+    const size_t data_size = width * height * 3;
+    if (color_rgb->getData() == nullptr || color_rgb->getDataSize() < data_size) {
+        set_error("Color frame data is missing or shorter than its dimensions");
+        return nullptr;
+    }
+
+    size_t dimensions[3] = {3, width, height};
+    NDArray* array = pNDArrayPool->alloc(3, dimensions, NDUInt8, 0, nullptr);
+    if (array == nullptr) {
+        set_error("Failed to allocate color NDArray");
+        return nullptr;
+    }
+    std::memcpy(array->pData, color_rgb->getData(), data_size);
+    add_frame_attributes(array, color_frame, color_frame->getFormat(), NDColorModeRGB1);
+    return array;
+}
+
+NDArray* OrbbecDriver::make_depth_array(const std::shared_ptr<ob::DepthFrame>& frame) {
     const OBFormat format = frame->getFormat();
     if (format != OB_FORMAT_Y16 && format != OB_FORMAT_Z16) {
-        char message[128];
-        epicsSnprintf(message, sizeof(message), "Unsupported depth format: %d", static_cast<int>(format));
-        set_error(message);
-        return asynError;
+        set_error("Unsupported depth format: " + format_name(format));
+        return nullptr;
     }
 
     const size_t width = frame->getWidth();
     const size_t height = frame->getHeight();
-    if (width == 0 || height == 0 || width > static_cast<size_t>(std::numeric_limits<int>::max()) ||
-        height > static_cast<size_t>(std::numeric_limits<int>::max()) ||
-        width > std::numeric_limits<size_t>::max() / height ||
-        width * height > std::numeric_limits<size_t>::max() / sizeof(epicsUInt16) ||
-        width * height * sizeof(epicsUInt16) > static_cast<size_t>(std::numeric_limits<int>::max())) {
+    if (!valid_dimensions(width, height, sizeof(epicsUInt16))) {
         set_error("Invalid depth frame dimensions");
-        return asynError;
+        return nullptr;
     }
 
     const size_t data_size = width * height * sizeof(epicsUInt16);
     if (frame->getData() == nullptr || frame->getDataSize() < data_size) {
         set_error("Depth frame data is missing or shorter than its dimensions");
-        return asynError;
+        return nullptr;
     }
 
     size_t dimensions[2] = {width, height};
     NDArray* array = pNDArrayPool->alloc(2, dimensions, NDUInt16, 0, nullptr);
     if (array == nullptr) {
         set_error("Failed to allocate depth NDArray");
+        return nullptr;
+    }
+    std::memcpy(array->pData, frame->getData(), data_size);
+    add_frame_attributes(array, frame, format, NDColorModeMono);
+
+    epicsFloat32 depth_scale = frame->getValueScale();
+    char depth_units[] = "mm per raw unit";
+    array->pAttributeList->add("OrbbecDepthScale", "Millimeters per raw depth unit", NDAttrFloat32,
+                               &depth_scale);
+    array->pAttributeList->add("OrbbecDepthUnits", "Depth scale units", NDAttrString, depth_units);
+    return array;
+}
+
+void OrbbecDriver::set_array_params(NDArray* array, int addr, int unique_id, const epicsTimeStamp& time_stamp) {
+    array->uniqueId = unique_id;
+    array->epicsTS = time_stamp;
+    array->timeStamp = time_stamp.secPastEpoch + time_stamp.nsec / 1.e9;
+
+    NDArrayInfo_t info;
+    array->getInfo(&info);
+    setIntegerParam(addr, NDArraySizeX, static_cast<int>(info.xSize));
+    setIntegerParam(addr, NDArraySizeY, static_cast<int>(info.ySize));
+    setIntegerParam(addr, NDArraySizeZ, static_cast<int>(info.colorSize));
+    setIntegerParam(addr, NDArraySize, static_cast<int>(info.totalBytes));
+    setIntegerParam(addr, NDNDimensions, array->ndims);
+    setIntegerParam(addr, NDDataType, array->dataType);
+    setIntegerParam(addr, NDColorMode, info.colorMode);
+    setIntegerParam(addr, NDUniqueId, unique_id);
+    setDoubleParam(addr, NDTimeStamp, array->timeStamp);
+    setIntegerParam(addr, NDArrayCounter, unique_id);
+}
+
+asynStatus OrbbecDriver::publish_frame_pair(const std::shared_ptr<ob::ColorFrame>& color_frame,
+                                            const std::shared_ptr<ob::Frame>& color_rgb,
+                                            const std::shared_ptr<ob::DepthFrame>& depth_frame) {
+    using ArrayGuard = std::unique_ptr<NDArray, void (*)(NDArray*)>;
+    auto release = [](NDArray* value) { value->release(); };
+
+    NDArray* color_array = make_color_array(color_frame, color_rgb);
+    if (color_array == nullptr) {
         return asynError;
     }
+    ArrayGuard color_guard(color_array, release);
 
-    std::unique_ptr<NDArray, void (*)(NDArray*)> array_guard(array, [](NDArray* value) { value->release(); });
-    std::memcpy(array->pData, frame->getData(), data_size);
+    NDArray* depth_array = make_depth_array(depth_frame);
+    if (depth_array == nullptr) {
+        return asynError;
+    }
+    ArrayGuard depth_guard(depth_array, release);
 
     int array_counter = 0;
     int image_counter = 0;
@@ -102,48 +209,25 @@ asynStatus OrbbecDriver::publish_depth_frame(const std::shared_ptr<ob::DepthFram
     ++array_counter;
     ++image_counter;
 
-    updateTimeStamp(&array->epicsTS);
-    array->timeStamp = array->epicsTS.secPastEpoch + array->epicsTS.nsec / 1.e9;
-    array->uniqueId = array_counter;
+    epicsTimeStamp time_stamp;
+    updateTimeStamp(&time_stamp);
+    set_array_params(color_array, COLOR_ADDR, array_counter, time_stamp);
+    set_array_params(depth_array, DEPTH_ADDR, array_counter, time_stamp);
 
-    getAttributes(array->pAttributeList);
-    epicsUInt64 frame_index = frame->getIndex();
-    epicsUInt64 device_timestamp = frame->getTimeStampUs();
-    epicsUInt64 system_timestamp = frame->getSystemTimeStampUs();
-    epicsFloat32 depth_scale = frame->getValueScale();
-    epicsInt32 pixel_format = static_cast<epicsInt32>(format);
-    char depth_units[] = "mm per raw unit";
-    array->pAttributeList->add("OrbbecFrameIndex", "Orbbec SDK frame index", NDAttrUInt64, &frame_index);
-    array->pAttributeList->add("OrbbecDeviceTimestampUs", "Device timestamp in microseconds", NDAttrUInt64,
-                               &device_timestamp);
-    array->pAttributeList->add("OrbbecSystemTimestampUs", "Host timestamp in microseconds", NDAttrUInt64,
-                               &system_timestamp);
-    array->pAttributeList->add("OrbbecDepthScale", "Millimeters per raw depth unit", NDAttrFloat32,
-                               &depth_scale);
-    array->pAttributeList->add("OrbbecDepthUnits", "Depth scale units", NDAttrString, depth_units);
-    array->pAttributeList->add("OrbbecPixelFormat", "Orbbec SDK pixel format", NDAttrInt32, &pixel_format);
-
-    setIntegerParam(ADSizeX, static_cast<int>(width));
-    setIntegerParam(ADSizeY, static_cast<int>(height));
-    setIntegerParam(ADMaxSizeX, static_cast<int>(width));
-    setIntegerParam(ADMaxSizeY, static_cast<int>(height));
-    setIntegerParam(NDArraySizeX, static_cast<int>(width));
-    setIntegerParam(NDArraySizeY, static_cast<int>(height));
-    setIntegerParam(NDArraySize, static_cast<int>(data_size));
-    setIntegerParam(NDNDimensions, 2);
-    setIntegerParam(NDDataType, NDUInt16);
-    setIntegerParam(NDColorMode, NDColorModeMono);
-    setIntegerParam(NDUniqueId, array_counter);
-    setDoubleParam(NDTimeStamp, array->timeStamp);
-    setIntegerParam(NDArrayCounter, array_counter);
+    setIntegerParam(ADSizeX, static_cast<int>(color_frame->getWidth()));
+    setIntegerParam(ADSizeY, static_cast<int>(color_frame->getHeight()));
+    setIntegerParam(ADMaxSizeX, static_cast<int>(color_frame->getWidth()));
+    setIntegerParam(ADMaxSizeY, static_cast<int>(color_frame->getHeight()));
     setIntegerParam(ADNumImagesCounter, image_counter);
-    callParamCallbacks();
+    callParamCallbacks(COLOR_ADDR);
+    callParamCallbacks(DEPTH_ADDR);
 
     int array_callbacks = 0;
     getIntegerParam(NDArrayCallbacks, &array_callbacks);
     if (array_callbacks) {
         unlock();
-        doCallbacksGenericPointer(array, NDArrayData, 0);
+        doCallbacksGenericPointer(color_array, NDArrayData, COLOR_ADDR);
+        doCallbacksGenericPointer(depth_array, NDArrayData, DEPTH_ADDR);
         lock();
     }
     return asynSuccess;
@@ -178,6 +262,7 @@ void OrbbecDriver::acquisition_task() {
         bool pipeline_started = false;
         bool operator_stopped = false;
         bool acquisition_complete = false;
+        std::shared_ptr<ob::FormatConvertFilter> format_converter;
         std::string error_message;
 
         try {
@@ -186,7 +271,10 @@ void OrbbecDriver::acquisition_task() {
             }
             pipeline = std::make_shared<ob::Pipeline>(device_);
             auto config = std::make_shared<ob::Config>();
+            config->enableVideoStream(OB_STREAM_COLOR);
             config->enableVideoStream(OB_STREAM_DEPTH);
+            config->setFrameAggregateOutputMode(OB_FRAME_AGGREGATE_OUTPUT_ALL_TYPE_FRAME_REQUIRE);
+            pipeline->enableFrameSync();
             pipeline->start(config);
             pipeline_started = true;
 
@@ -194,7 +282,7 @@ void OrbbecDriver::acquisition_task() {
             getIntegerParam(ADAcquire, &acquire);
             if (acquire && !shutting_down_) {
                 setIntegerParam(ADStatus, ADStatusAcquire);
-                setStringParam(ADStatusMessage, "Acquiring depth frames");
+                setStringParam(ADStatusMessage, "Acquiring color+depth frames");
                 callParamCallbacks();
             } else {
                 operator_stopped = !shutting_down_;
@@ -217,16 +305,37 @@ void OrbbecDriver::acquisition_task() {
                 if (!frame_set) {
                     continue;
                 }
+                std::shared_ptr<ob::Frame> color_raw = frame_set->getFrame(OB_FRAME_COLOR);
                 std::shared_ptr<ob::Frame> depth_raw = frame_set->getFrame(OB_FRAME_DEPTH);
-                if (!depth_raw) {
+                if (!color_raw || !depth_raw) {
                     continue;
                 }
+                std::shared_ptr<ob::ColorFrame> color_frame = color_raw->as<ob::ColorFrame>();
                 std::shared_ptr<ob::DepthFrame> depth_frame = depth_raw->as<ob::DepthFrame>();
+
+                const OBFormat color_format = color_frame->getFormat();
+                std::shared_ptr<ob::Frame> color_rgb = color_frame;
+                if (color_format != OB_FORMAT_RGB) {
+                    OBConvertFormat convert_type;
+                    if (!rgb_convert_type(color_format, &convert_type)) {
+                        error_message = "Unsupported color format: " + format_name(color_format);
+                        break;
+                    }
+                    if (!format_converter) {
+                        format_converter = std::make_shared<ob::FormatConvertFilter>();
+                    }
+                    format_converter->setFormatConvertType(convert_type);
+                    color_rgb = format_converter->process(color_frame);
+                    if (!color_rgb) {
+                        error_message = "Color format conversion failed for " + format_name(color_format);
+                        break;
+                    }
+                }
 
                 lock();
                 asynStatus status;
                 try {
-                    status = publish_depth_frame(depth_frame);
+                    status = publish_frame_pair(color_frame, color_rgb, depth_frame);
                 } catch (...) {
                     unlock();
                     throw;
@@ -242,7 +351,7 @@ void OrbbecDriver::acquisition_task() {
                 if (status != asynSuccess) {
                     char message[512];
                     getStringParam(last_error_, sizeof(message), message);
-                    error_message = message[0] != '\0' ? message : "Failed to publish depth frame";
+                    error_message = message[0] != '\0' ? message : "Failed to publish color+depth frames";
                     break;
                 }
                 if (complete) {
@@ -259,7 +368,7 @@ void OrbbecDriver::acquisition_task() {
                           error.what(), error.getFunction(), error.getArgs(), error.getStatus());
             error_message = message;
         } catch (const std::exception& error) {
-            error_message = std::string("Depth acquisition error: ") + error.what();
+            error_message = std::string("Acquisition error: ") + error.what();
         }
 
         if (pipeline_started) {
@@ -267,7 +376,7 @@ void OrbbecDriver::acquisition_task() {
                 pipeline->stop();
             } catch (const std::exception& error) {
                 if (error_message.empty()) {
-                    error_message = std::string("Failed to stop depth pipeline: ") + error.what();
+                    error_message = std::string("Failed to stop pipeline: ") + error.what();
                 } else {
                     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "%s: pipeline stop failed: %s\n", driver_name,
                               error.what());
@@ -350,7 +459,7 @@ asynStatus OrbbecDriver::connect_device(const char* device_id) {
     return asynError;
 }
 
-constexpr unsigned int MAX_ADDR = 1;
+constexpr unsigned int MAX_ADDR = 2;
 constexpr unsigned int NUM_PARAMS = 7;
 
 OrbbecDriver::OrbbecDriver(const char* port_name, const char* device_id, int max_buffers, size_t max_memory,
@@ -375,10 +484,14 @@ OrbbecDriver::OrbbecDriver(const char* port_name, const char* device_id, int max
     setIntegerParam(ADImageMode, ADImageContinuous);
     setIntegerParam(ADNumImages, 1);
     setIntegerParam(ADNumImagesCounter, 0);
-    setIntegerParam(NDArrayCounter, 0);
-    setIntegerParam(NDNDimensions, 2);
-    setIntegerParam(NDDataType, NDUInt16);
-    setIntegerParam(NDColorMode, NDColorModeMono);
+    setIntegerParam(COLOR_ADDR, NDArrayCounter, 0);
+    setIntegerParam(COLOR_ADDR, NDNDimensions, 3);
+    setIntegerParam(COLOR_ADDR, NDDataType, NDUInt8);
+    setIntegerParam(COLOR_ADDR, NDColorMode, NDColorModeRGB1);
+    setIntegerParam(DEPTH_ADDR, NDArrayCounter, 0);
+    setIntegerParam(DEPTH_ADDR, NDNDimensions, 2);
+    setIntegerParam(DEPTH_ADDR, NDDataType, NDUInt16);
+    setIntegerParam(DEPTH_ADDR, NDColorMode, NDColorModeMono);
 
     if (connect_device(device_id) == asynSuccess) {
         start_event_ = epicsEventMustCreate(epicsEventEmpty);
@@ -392,7 +505,8 @@ OrbbecDriver::OrbbecDriver(const char* port_name, const char* device_id, int max
             set_error("Failed to create acquisition thread");
         }
     }
-    callParamCallbacks();
+    callParamCallbacks(COLOR_ADDR);
+    callParamCallbacks(DEPTH_ADDR);
 }
 
 OrbbecDriver::~OrbbecDriver() {
@@ -444,14 +558,14 @@ asynStatus OrbbecDriver::writeInt32(asynUser* pasyn_user, epicsInt32 value) {
     if (value != 0) {
         setIntegerParam(ADNumImagesCounter, 0);
         setIntegerParam(ADStatus, ADStatusWaiting);
-        setStringParam(ADStatusMessage, "Waiting to start depth acquisition");
+        setStringParam(ADStatusMessage, "Waiting to start acquisition");
         setStringParam(last_error_, "");
         callParamCallbacks();
         epicsEventSignal(start_event_);
     } else {
         if (acquisition_running_) {
             setIntegerParam(ADStatus, ADStatusAborting);
-            setStringParam(ADStatusMessage, "Stopping depth acquisition");
+            setStringParam(ADStatusMessage, "Stopping acquisition");
         }
         callParamCallbacks();
         epicsEventSignal(stop_event_);

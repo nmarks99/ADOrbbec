@@ -7,12 +7,10 @@
 #include <epicsThread.h>
 #include <libobsensor/hpp/Context.hpp>
 #include <libobsensor/hpp/Device.hpp>
+#include <libobsensor/hpp/Filter.hpp>
 #include <libobsensor/hpp/Frame.hpp>
 #include <libobsensor/hpp/Pipeline.hpp>
 #include <libobsensor/hpp/Version.hpp>
-
-// static const char* driver_name = "OrbbecDriver";
-// static const char* driver_version = "0.1.0";
 
 class OrbbecDriver : public ADDriver {
   public:
@@ -36,7 +34,15 @@ class OrbbecDriver : public ADDriver {
     static void acquisition_task_c(void* driver);
     void acquisition_task();
     asynStatus connect_device(const char* device_id);
-    asynStatus publish_depth_frame(const std::shared_ptr<ob::DepthFrame>& frame);
+    asynStatus publish_frame_pair(const std::shared_ptr<ob::ColorFrame>& color_frame,
+                                  const std::shared_ptr<ob::Frame>& color_rgb,
+                                  const std::shared_ptr<ob::DepthFrame>& depth_frame);
+    NDArray* make_color_array(const std::shared_ptr<ob::ColorFrame>& color_frame,
+                              const std::shared_ptr<ob::Frame>& color_rgb);
+    NDArray* make_depth_array(const std::shared_ptr<ob::DepthFrame>& frame);
+    void add_frame_attributes(NDArray* array, const std::shared_ptr<ob::Frame>& frame, OBFormat source_format,
+                              NDColorMode_t color_mode);
+    void set_array_params(NDArray* array, int addr, int unique_id, const epicsTimeStamp& time_stamp);
     void set_error(const std::string& message);
 
     std::shared_ptr<ob::Context> context_;
