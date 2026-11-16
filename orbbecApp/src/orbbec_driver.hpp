@@ -30,6 +30,9 @@ class OrbbecDriver : public ADDriver {
     int device_pid_;
     int last_error_;
     int depth_align_;
+    int intrinsic_[4];
+    int distortion_[8];
+    int distortion_model_;
 
   private:
     static void acquisition_task_c(void* driver);
@@ -44,6 +47,7 @@ class OrbbecDriver : public ADDriver {
     void add_frame_attributes(NDArray* array, const std::shared_ptr<ob::Frame>& frame, OBFormat source_format,
                               NDColorMode_t color_mode);
     void set_array_params(NDArray* array, int addr, int unique_id, const epicsTimeStamp& time_stamp);
+    void set_calibration(NDArray* array, int addr, const std::shared_ptr<ob::Frame>& frame);
     void set_error(const std::string& message);
 
     std::shared_ptr<ob::Context> context_;

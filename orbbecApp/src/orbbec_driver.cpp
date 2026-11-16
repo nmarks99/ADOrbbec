@@ -27,6 +27,12 @@ static const char* driver_version = "0.1.0";
 constexpr int COLOR_ADDR = 0;
 constexpr int DEPTH_ADDR = 1;
 
+static const char* intrinsic_names[4] = {"Fx", "Fy", "Cx", "Cy"};
+static const char* distortion_names[8] = {"K1", "K2", "K3", "K4", "K5", "K6", "P1", "P2"};
+static const char* intrinsic_params[4] = {"ORBBEC_FX", "ORBBEC_FY", "ORBBEC_CX", "ORBBEC_CY"};
+static const char* distortion_params[8] = {"ORBBEC_K1", "ORBBEC_K2", "ORBBEC_K3", "ORBBEC_K4",
+                                           "ORBBEC_K5", "ORBBEC_K6", "ORBBEC_P1", "ORBBEC_P2"};
+
 void OrbbecDriver::set_error(const std::string& message) {
     setIntegerParam(ADAcquire, 0);
     setStringParam(last_error_, message.c_str());
@@ -187,6 +193,31 @@ void OrbbecDriver::set_array_params(NDArray* array, int addr, int unique_id, con
     setIntegerParam(addr, NDArrayCounter, unique_id);
 }
 
+void OrbbecDriver::set_calibration(NDArray* array, int addr, const std::shared_ptr<ob::Frame>& frame) {
+    auto profile = frame->getStreamProfile()->as<ob::VideoStreamProfile>();
+    const OBCameraIntrinsic intrinsic = profile->getIntrinsic();
+    const OBCameraDistortion distortion = profile->getDistortion();
+    const double intrinsic_values[4] = {intrinsic.fx, intrinsic.fy, intrinsic.cx, intrinsic.cy};
+    const double distortion_values[8] = {distortion.k1, distortion.k2, distortion.k3, distortion.k4,
+                                         distortion.k5, distortion.k6, distortion.p1, distortion.p2};
+
+    for (int i = 0; i < 4; ++i) {
+        epicsFloat64 value = intrinsic_values[i];
+        setDoubleParam(addr, intrinsic_[i], value);
+        array->pAttributeList->add((std::string("Orbbec") + intrinsic_names[i]).c_str(),
+                                   "Camera intrinsic (pixels)", NDAttrFloat64, &value);
+    }
+    for (int i = 0; i < 8; ++i) {
+        epicsFloat64 value = distortion_values[i];
+        setDoubleParam(addr, distortion_[i], value);
+        array->pAttributeList->add((std::string("Orbbec") + distortion_names[i]).c_str(),
+                                   "Camera distortion coefficient", NDAttrFloat64, &value);
+    }
+    epicsInt32 model = distortion.model;
+    setIntegerParam(addr, distortion_model_, model);
+    array->pAttributeList->add("OrbbecDistortionModel", "OBCameraDistortionModel", NDAttrInt32, &model);
+}
+
 asynStatus OrbbecDriver::publish_frame_pair(const std::shared_ptr<ob::ColorFrame>& color_frame,
                                             const std::shared_ptr<ob::Frame>& color_rgb,
                                             const std::shared_ptr<ob::DepthFrame>& depth_frame,
@@ -217,6 +248,8 @@ asynStatus OrbbecDriver::publish_frame_pair(const std::shared_ptr<ob::ColorFrame
     updateTimeStamp(&time_stamp);
     set_array_params(color_array, COLOR_ADDR, array_counter, time_stamp);
     set_array_params(depth_array, DEPTH_ADDR, array_counter, time_stamp);
+    set_calibration(color_array, COLOR_ADDR, color_frame);
+    set_calibration(depth_array, DEPTH_ADDR, depth_frame);
 
     setIntegerParam(ADSizeX, static_cast<int>(color_frame->getWidth()));
     setIntegerParam(ADSizeY, static_cast<int>(color_frame->getHeight()));
@@ -478,7 +511,7 @@ asynStatus OrbbecDriver::connect_device(const char* device_id) {
 }
 
 constexpr unsigned int MAX_ADDR = 2;
-constexpr unsigned int NUM_PARAMS = 8;
+constexpr unsigned int NUM_PARAMS = 21;
 
 OrbbecDriver::OrbbecDriver(const char* port_name, const char* device_id, int max_buffers, size_t max_memory,
                            int priority, int stack_size)
@@ -495,6 +528,13 @@ OrbbecDriver::OrbbecDriver(const char* port_name, const char* device_id, int max
     createParam("ORBBEC_DEVICE_PID", asynParamInt32, &device_pid_);
     createParam("ORBBEC_LAST_ERROR", asynParamOctet, &last_error_);
     createParam("ORBBEC_DEPTH_ALIGN", asynParamInt32, &depth_align_);
+    for (int i = 0; i < 4; ++i) {
+        createParam(intrinsic_params[i], asynParamFloat64, &intrinsic_[i]);
+    }
+    for (int i = 0; i < 8; ++i) {
+        createParam(distortion_params[i], asynParamFloat64, &distortion_[i]);
+    }
+    createParam("ORBBEC_DISTORTION_MODEL", asynParamInt32, &distortion_model_);
 
     setStringParam(device_selector_, device_id ? device_id : "");
     setStringParam(NDDriverVersion, driver_version);
