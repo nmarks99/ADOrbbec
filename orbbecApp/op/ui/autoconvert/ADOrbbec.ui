@@ -4,108 +4,16 @@
 <widget class="QMainWindow" name="MainWindow">
     <property name="geometry">
         <rect>
-            <x>5071</x>
-            <y>585</y>
+            <x>100</x>
+            <y>100</y>
             <width>780</width>
-            <height>640</height>
+            <height>665</height>
         </rect>
     </property>
     <property name="styleSheet">
         <string>
 
 QWidget#centralWidget {background: rgba(187, 187, 187, 255);}
-
-caTable {
-       background: cornsilk;
-       alternate-background-color: wheat;
-}
-
-caLineEdit {
-     border-radius: 1px;
-     background: lightyellow;
-     color: black;
- }
- 
- caLabel {
-     border-radius: 1px;
-     background: lightyellow;
-     color: black;
- }
-
-caTextEntry {
-    color: rgb(127, 0, 63);
-    background-color: cornsilk;
-    selection-color: #0a214c;
-    selection-background-color: wheat;
-    border: 1px groove black;
-    border-radius: 1px;
-    padding: 1px;
-}
-
-caTextEntry:focus {
-    padding: 0px;
-    border: 2px groove darkred;
-    border-radius: 1px;
-}
-
-/* when font specified, no font sizing is done any more,  font: 10pt; is not bad */
-QPushButton {
-      border-color: #00b;
-      border-radius: 2px;
-      padding: 3px;
-      border-width: 1px;
-
-	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
-						   stop:0   rgba(224, 239, 255, 255),
-						   stop:0.5 rgba(199, 215, 230, 255),
-						   stop:1   rgba(184, 214, 236, 255));
-}
-QPushButton:hover {
-	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
-						stop:0   rgba(201, 226, 255, 255),
-						stop:0.5 rgba(177, 204, 230, 255),
-						stop:1   rgba(163, 205, 236, 255));
-}
-QPushButton:pressed {
-	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
-						stop:0   rgba(174, 219, 255, 255),
-						stop:0.5 rgba(165, 199, 230, 255),
-						stop:1   rgba(134, 188, 236, 255));
-}
-
-QPushButton:disabled {
-	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
-						stop:0   rgba(174, 219, 255, 255),
-						stop:0.5 rgba(165, 199, 230, 255),
-						stop:1   rgba(134, 188, 236, 255));
-}
-
-
-caChoice &gt; QPushButton {
-text-align: left;
-background-color: lightgray;
-border: 3px gray;
-}
-
-caChoice &gt; QPushButton:pressed {
-background-color: lightgray;
-border: 3px gray;
-}
-
-caChoice &gt; QPushButton:checked {
-background-color: #EEEEEE;
-border: 3px gray;
-}
-
-caChoice &gt; QPushButton:default {
-background-color: lightgray;
-border: 3px gray;
-}
-
-caMenu{
-    background: lightyellow;
-}
-
 
 </string>
     </property>
@@ -350,6 +258,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -364,9 +275,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -440,6 +348,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -454,9 +365,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -530,6 +438,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -544,9 +455,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -620,6 +528,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -634,9 +545,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -710,6 +618,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -724,9 +635,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -800,6 +708,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -814,9 +725,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -890,6 +798,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -904,9 +815,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -980,6 +888,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -994,9 +905,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -1070,6 +978,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -1084,9 +995,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -1160,6 +1068,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -1174,9 +1085,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -1386,6 +1294,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -1400,9 +1311,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>decimal</enum>
@@ -1527,6 +1435,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -1541,9 +1452,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>decimal</enum>
@@ -1617,6 +1525,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -1631,9 +1542,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>decimal</enum>
@@ -1911,6 +1819,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -1925,9 +1836,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>decimal</enum>
@@ -2001,6 +1909,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -2015,9 +1926,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>string</enum>
@@ -2142,6 +2050,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -2156,9 +2067,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>decimal</enum>
@@ -2232,6 +2140,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -2246,9 +2157,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>decimal</enum>
@@ -2352,6 +2260,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -2366,9 +2277,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>decimal</enum>
@@ -2508,6 +2416,9 @@ caMenu{
                     <blue>187</blue>
                 </color>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="limitsMode">
                 <enum>caLineEdit::Channel</enum>
             </property>
@@ -2522,9 +2433,6 @@ caMenu{
             </property>
             <property name="maxValue">
                 <double>1.0</double>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <property name="formatType">
                 <enum>decimal</enum>
@@ -2575,7 +2483,7 @@ caMenu{
                     <x>5</x>
                     <y>360</y>
                     <width>770</width>
-                    <height>105</height>
+                    <height>130</height>
                 </rect>
             </property>
             <property name="foreground">
@@ -2915,6 +2823,9 @@ caMenu{
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="geometry">
                 <rect>
                     <x>650</x>
@@ -2922,9 +2833,6 @@ caMenu{
                     <width>110</width>
                     <height>15</height>
                 </rect>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
         <widget class="caLabel" name="caLabel_35">
@@ -2951,6 +2859,9 @@ caMenu{
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="geometry">
                 <rect>
                     <x>15</x>
@@ -2958,9 +2869,6 @@ caMenu{
                     <width>55</width>
                     <height>20</height>
                 </rect>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
         <widget class="caLineEdit" name="caLineEdit_19">
@@ -3419,6 +3327,9 @@ caMenu{
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="geometry">
                 <rect>
                     <x>15</x>
@@ -3426,9 +3337,6 @@ caMenu{
                     <width>55</width>
                     <height>20</height>
                 </rect>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
         </widget>
         <widget class="caLineEdit" name="caLineEdit_27">
@@ -3863,6 +3771,162 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
+        <widget class="caLabel" name="caLabel_37">
+            <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="0">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="text">
+                <string>Align depth to color</string>
+            </property>
+            <property name="fontScaleMode">
+                <enum>ESimpleLabel::WidthAndHeight</enum>
+            </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>15</x>
+                    <y>460</y>
+                    <width>160</width>
+                    <height>20</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="caMenu" name="caMenu_3">
+            <property name="geometry">
+                <rect>
+                    <x>180</x>
+                    <y>460</y>
+                    <width>100</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="channel">
+                <string>$(P)$(R)Depth:AlignToColor</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>115</red>
+                    <green>223</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="colorMode">
+                <enum>caMenu::Static</enum>
+            </property>
+        </widget>
+        <widget class="caLineEdit" name="caLineEdit_35">
+            <property name="geometry">
+                <rect>
+                    <x>285</x>
+                    <y>460</y>
+                    <width>100</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="fontScaleMode">
+                <enum>caLineEdit::WidthAndHeight</enum>
+            </property>
+            <property name="channel">
+                <string>$(P)$(R)Depth:AlignToColor_RBV</string>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>10</red>
+                    <green>0</green>
+                    <blue>184</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="255">
+                    <red>187</red>
+                    <green>187</green>
+                    <blue>187</blue>
+                </color>
+            </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="limitsMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="precisionMode">
+                <enum>caLineEdit::Channel</enum>
+            </property>
+            <property name="minValue">
+                <double>0.0</double>
+            </property>
+            <property name="maxValue">
+                <double>1.0</double>
+            </property>
+            <property name="formatType">
+                <enum>decimal</enum>
+            </property>
+            <property name="colorMode">
+                <enum>caLineEdit::Static</enum>
+            </property>
+        </widget>
+        <widget class="caLabel" name="caLabel_38">
+            <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="foreground">
+                <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="background">
+                <color alpha="0">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="text">
+                <string>Stream</string>
+            </property>
+            <property name="fontScaleMode">
+                <enum>ESimpleLabel::WidthAndHeight</enum>
+            </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignHCenter|Qt::AlignVCenter</set>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>385</y>
+                    <width>55</width>
+                    <height>15</height>
+                </rect>
+            </property>
+        </widget>
         <widget class="caGraphics" name="caRectangle_7">
             <property name="form">
                 <enum>caGraphics::Rectangle</enum>
@@ -3870,7 +3934,7 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>5</x>
-                    <y>475</y>
+                    <y>500</y>
                     <width>770</width>
                     <height>20</height>
                 </rect>
@@ -3903,7 +3967,7 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>5</x>
-                    <y>475</y>
+                    <y>500</y>
                     <width>770</width>
                     <height>155</height>
                 </rect>
@@ -3933,7 +3997,7 @@ caMenu{
                 <enum>Solid</enum>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_37">
+        <widget class="caLabel" name="caLabel_39">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -3963,13 +4027,13 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>5</x>
-                    <y>475</y>
+                    <y>500</y>
                     <width>770</width>
                     <height>20</height>
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_38">
+        <widget class="caLabel" name="caLabel_40">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -3999,13 +4063,13 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>15</x>
-                    <y>500</y>
+                    <y>525</y>
                     <width>60</width>
                     <height>15</height>
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_39">
+        <widget class="caLabel" name="caLabel_41">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4035,13 +4099,13 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>80</x>
-                    <y>500</y>
+                    <y>525</y>
                     <width>85</width>
                     <height>15</height>
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_40">
+        <widget class="caLabel" name="caLabel_42">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4071,13 +4135,13 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>170</x>
-                    <y>500</y>
+                    <y>525</y>
                     <width>70</width>
                     <height>15</height>
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_41">
+        <widget class="caLabel" name="caLabel_43">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4107,13 +4171,13 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>245</x>
-                    <y>500</y>
+                    <y>525</y>
                     <width>80</width>
                     <height>15</height>
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_42">
+        <widget class="caLabel" name="caLabel_44">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4143,13 +4207,13 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>330</x>
-                    <y>500</y>
+                    <y>525</y>
                     <width>70</width>
                     <height>15</height>
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_43">
+        <widget class="caLabel" name="caLabel_45">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4179,13 +4243,13 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>405</x>
-                    <y>500</y>
+                    <y>525</y>
                     <width>70</width>
                     <height>15</height>
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_44">
+        <widget class="caLabel" name="caLabel_46">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4215,13 +4279,13 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>480</x>
-                    <y>500</y>
+                    <y>525</y>
                     <width>75</width>
                     <height>15</height>
                 </rect>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_45">
+        <widget class="caLabel" name="caLabel_47">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4245,23 +4309,23 @@ caMenu{
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="geometry">
                 <rect>
                     <x>15</x>
-                    <y>525</y>
+                    <y>550</y>
                     <width>60</width>
                     <height>20</height>
                 </rect>
             </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
         </widget>
-        <widget class="caMenu" name="caMenu_3">
+        <widget class="caMenu" name="caMenu_4">
             <property name="geometry">
                 <rect>
                     <x>80</x>
-                    <y>525</y>
+                    <y>550</y>
                     <width>85</width>
                     <height>20</height>
                 </rect>
@@ -4287,11 +4351,11 @@ caMenu{
                 <enum>caMenu::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_35">
+        <widget class="caLineEdit" name="caLineEdit_36">
             <property name="geometry">
                 <rect>
                     <x>170</x>
-                    <y>525</y>
+                    <y>550</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -4341,11 +4405,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_36">
+        <widget class="caLineEdit" name="caLineEdit_37">
             <property name="geometry">
                 <rect>
                     <x>245</x>
-                    <y>525</y>
+                    <y>550</y>
                     <width>80</width>
                     <height>20</height>
                 </rect>
@@ -4395,11 +4459,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_37">
+        <widget class="caLineEdit" name="caLineEdit_38">
             <property name="geometry">
                 <rect>
                     <x>330</x>
-                    <y>525</y>
+                    <y>550</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -4449,11 +4513,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_38">
+        <widget class="caLineEdit" name="caLineEdit_39">
             <property name="geometry">
                 <rect>
                     <x>405</x>
-                    <y>525</y>
+                    <y>550</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -4503,11 +4567,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_39">
+        <widget class="caLineEdit" name="caLineEdit_40">
             <property name="geometry">
                 <rect>
                     <x>480</x>
-                    <y>525</y>
+                    <y>550</y>
                     <width>75</width>
                     <height>20</height>
                 </rect>
@@ -4561,7 +4625,7 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>560</x>
-                    <y>525</y>
+                    <y>550</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -4599,7 +4663,7 @@ caMenu{
                 <string>false</string>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_46">
+        <widget class="caLabel" name="caLabel_48">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -4623,23 +4687,23 @@ caMenu{
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="geometry">
                 <rect>
                     <x>15</x>
-                    <y>550</y>
+                    <y>575</y>
                     <width>60</width>
                     <height>20</height>
                 </rect>
             </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
         </widget>
-        <widget class="caMenu" name="caMenu_4">
+        <widget class="caMenu" name="caMenu_5">
             <property name="geometry">
                 <rect>
                     <x>80</x>
-                    <y>550</y>
+                    <y>575</y>
                     <width>85</width>
                     <height>20</height>
                 </rect>
@@ -4665,11 +4729,11 @@ caMenu{
                 <enum>caMenu::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_40">
+        <widget class="caLineEdit" name="caLineEdit_41">
             <property name="geometry">
                 <rect>
                     <x>170</x>
-                    <y>550</y>
+                    <y>575</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -4719,11 +4783,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_41">
+        <widget class="caLineEdit" name="caLineEdit_42">
             <property name="geometry">
                 <rect>
                     <x>245</x>
-                    <y>550</y>
+                    <y>575</y>
                     <width>80</width>
                     <height>20</height>
                 </rect>
@@ -4773,11 +4837,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_42">
+        <widget class="caLineEdit" name="caLineEdit_43">
             <property name="geometry">
                 <rect>
                     <x>330</x>
-                    <y>550</y>
+                    <y>575</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -4827,11 +4891,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_43">
+        <widget class="caLineEdit" name="caLineEdit_44">
             <property name="geometry">
                 <rect>
                     <x>405</x>
-                    <y>550</y>
+                    <y>575</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -4881,11 +4945,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_44">
+        <widget class="caLineEdit" name="caLineEdit_45">
             <property name="geometry">
                 <rect>
                     <x>480</x>
-                    <y>550</y>
+                    <y>575</y>
                     <width>75</width>
                     <height>20</height>
                 </rect>
@@ -4939,7 +5003,7 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>560</x>
-                    <y>550</y>
+                    <y>575</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -4977,7 +5041,7 @@ caMenu{
                 <string>false</string>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_47">
+        <widget class="caLabel" name="caLabel_49">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -5001,23 +5065,23 @@ caMenu{
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="geometry">
                 <rect>
                     <x>15</x>
-                    <y>575</y>
+                    <y>600</y>
                     <width>60</width>
                     <height>20</height>
                 </rect>
             </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
         </widget>
-        <widget class="caMenu" name="caMenu_5">
+        <widget class="caMenu" name="caMenu_6">
             <property name="geometry">
                 <rect>
                     <x>80</x>
-                    <y>575</y>
+                    <y>600</y>
                     <width>85</width>
                     <height>20</height>
                 </rect>
@@ -5043,11 +5107,11 @@ caMenu{
                 <enum>caMenu::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_45">
+        <widget class="caLineEdit" name="caLineEdit_46">
             <property name="geometry">
                 <rect>
                     <x>170</x>
-                    <y>575</y>
+                    <y>600</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -5097,11 +5161,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_46">
+        <widget class="caLineEdit" name="caLineEdit_47">
             <property name="geometry">
                 <rect>
                     <x>245</x>
-                    <y>575</y>
+                    <y>600</y>
                     <width>80</width>
                     <height>20</height>
                 </rect>
@@ -5151,11 +5215,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_47">
+        <widget class="caLineEdit" name="caLineEdit_48">
             <property name="geometry">
                 <rect>
                     <x>330</x>
-                    <y>575</y>
+                    <y>600</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -5205,11 +5269,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_48">
+        <widget class="caLineEdit" name="caLineEdit_49">
             <property name="geometry">
                 <rect>
                     <x>405</x>
-                    <y>575</y>
+                    <y>600</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -5259,11 +5323,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_49">
+        <widget class="caLineEdit" name="caLineEdit_50">
             <property name="geometry">
                 <rect>
                     <x>480</x>
-                    <y>575</y>
+                    <y>600</y>
                     <width>75</width>
                     <height>20</height>
                 </rect>
@@ -5317,7 +5381,7 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>560</x>
-                    <y>575</y>
+                    <y>600</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -5355,7 +5419,7 @@ caMenu{
                 <string>false</string>
             </property>
         </widget>
-        <widget class="caLabel" name="caLabel_48">
+        <widget class="caLabel" name="caLabel_50">
             <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
             </property>
@@ -5379,23 +5443,23 @@ caMenu{
             <property name="fontScaleMode">
                 <enum>ESimpleLabel::WidthAndHeight</enum>
             </property>
+            <property name="alignment">
+                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
             <property name="geometry">
                 <rect>
                     <x>15</x>
-                    <y>600</y>
+                    <y>625</y>
                     <width>60</width>
                     <height>20</height>
                 </rect>
             </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
         </widget>
-        <widget class="caMenu" name="caMenu_6">
+        <widget class="caMenu" name="caMenu_7">
             <property name="geometry">
                 <rect>
                     <x>80</x>
-                    <y>600</y>
+                    <y>625</y>
                     <width>85</width>
                     <height>20</height>
                 </rect>
@@ -5421,11 +5485,11 @@ caMenu{
                 <enum>caMenu::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_50">
+        <widget class="caLineEdit" name="caLineEdit_51">
             <property name="geometry">
                 <rect>
                     <x>170</x>
-                    <y>600</y>
+                    <y>625</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -5475,11 +5539,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_51">
+        <widget class="caLineEdit" name="caLineEdit_52">
             <property name="geometry">
                 <rect>
                     <x>245</x>
-                    <y>600</y>
+                    <y>625</y>
                     <width>80</width>
                     <height>20</height>
                 </rect>
@@ -5529,11 +5593,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_52">
+        <widget class="caLineEdit" name="caLineEdit_53">
             <property name="geometry">
                 <rect>
                     <x>330</x>
-                    <y>600</y>
+                    <y>625</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -5583,11 +5647,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_53">
+        <widget class="caLineEdit" name="caLineEdit_54">
             <property name="geometry">
                 <rect>
                     <x>405</x>
-                    <y>600</y>
+                    <y>625</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -5637,11 +5701,11 @@ caMenu{
                 <enum>caLineEdit::Static</enum>
             </property>
         </widget>
-        <widget class="caLineEdit" name="caLineEdit_54">
+        <widget class="caLineEdit" name="caLineEdit_55">
             <property name="geometry">
                 <rect>
                     <x>480</x>
-                    <y>600</y>
+                    <y>625</y>
                     <width>75</width>
                     <height>20</height>
                 </rect>
@@ -5695,7 +5759,7 @@ caMenu{
             <property name="geometry">
                 <rect>
                     <x>560</x>
-                    <y>600</y>
+                    <y>625</y>
                     <width>70</width>
                     <height>20</height>
                 </rect>
@@ -5731,42 +5795,6 @@ caMenu{
             </property>
             <property name="removeParent">
                 <string>false</string>
-            </property>
-        </widget>
-        <widget class="caLabel" name="caLabel_49">
-            <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-            </property>
-            <property name="foreground">
-                <color alpha="255">
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="background">
-                <color alpha="0">
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="text">
-                <string>Stream</string>
-            </property>
-            <property name="fontScaleMode">
-                <enum>ESimpleLabel::WidthAndHeight</enum>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignAbsolute|Qt::AlignHCenter|Qt::AlignVCenter</set>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>385</y>
-                    <width>55</width>
-                    <height>15</height>
-                </rect>
             </property>
         </widget>
         <zorder>caRectangle_0</zorder>
@@ -5813,10 +5841,10 @@ caMenu{
         <zorder>caLabel_34</zorder>
         <zorder>caLabel_35</zorder>
         <zorder>caLabel_36</zorder>
-        <zorder>caRectangle_7</zorder>
-        <zorder>caRectangle_8</zorder>
         <zorder>caLabel_37</zorder>
         <zorder>caLabel_38</zorder>
+        <zorder>caRectangle_7</zorder>
+        <zorder>caRectangle_8</zorder>
         <zorder>caLabel_39</zorder>
         <zorder>caLabel_40</zorder>
         <zorder>caLabel_41</zorder>
@@ -5828,6 +5856,7 @@ caMenu{
         <zorder>caLabel_47</zorder>
         <zorder>caLabel_48</zorder>
         <zorder>caLabel_49</zorder>
+        <zorder>caLabel_50</zorder>
         <zorder>caLineEdit_0</zorder>
         <zorder>caLineEdit_1</zorder>
         <zorder>caLineEdit_2</zorder>
@@ -5872,31 +5901,33 @@ caMenu{
         <zorder>caLineEdit_34</zorder>
         <zorder>caMenu_3</zorder>
         <zorder>caLineEdit_35</zorder>
+        <zorder>caMenu_4</zorder>
         <zorder>caLineEdit_36</zorder>
         <zorder>caLineEdit_37</zorder>
         <zorder>caLineEdit_38</zorder>
         <zorder>caLineEdit_39</zorder>
-        <zorder>caRelatedDisplay_0</zorder>
-        <zorder>caMenu_4</zorder>
         <zorder>caLineEdit_40</zorder>
+        <zorder>caRelatedDisplay_0</zorder>
+        <zorder>caMenu_5</zorder>
         <zorder>caLineEdit_41</zorder>
         <zorder>caLineEdit_42</zorder>
         <zorder>caLineEdit_43</zorder>
         <zorder>caLineEdit_44</zorder>
-        <zorder>caRelatedDisplay_1</zorder>
-        <zorder>caMenu_5</zorder>
         <zorder>caLineEdit_45</zorder>
+        <zorder>caRelatedDisplay_1</zorder>
+        <zorder>caMenu_6</zorder>
         <zorder>caLineEdit_46</zorder>
         <zorder>caLineEdit_47</zorder>
         <zorder>caLineEdit_48</zorder>
         <zorder>caLineEdit_49</zorder>
-        <zorder>caRelatedDisplay_2</zorder>
-        <zorder>caMenu_6</zorder>
         <zorder>caLineEdit_50</zorder>
+        <zorder>caRelatedDisplay_2</zorder>
+        <zorder>caMenu_7</zorder>
         <zorder>caLineEdit_51</zorder>
         <zorder>caLineEdit_52</zorder>
         <zorder>caLineEdit_53</zorder>
         <zorder>caLineEdit_54</zorder>
+        <zorder>caLineEdit_55</zorder>
         <zorder>caRelatedDisplay_3</zorder>
     </widget>
 </widget>

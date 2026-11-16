@@ -29,6 +29,7 @@ class OrbbecDriver : public ADDriver {
     int device_vid_;
     int device_pid_;
     int last_error_;
+    int depth_align_;
 
   private:
     static void acquisition_task_c(void* driver);
@@ -36,10 +37,10 @@ class OrbbecDriver : public ADDriver {
     asynStatus connect_device(const char* device_id);
     asynStatus publish_frame_pair(const std::shared_ptr<ob::ColorFrame>& color_frame,
                                   const std::shared_ptr<ob::Frame>& color_rgb,
-                                  const std::shared_ptr<ob::DepthFrame>& depth_frame);
+                                  const std::shared_ptr<ob::DepthFrame>& depth_frame, bool depth_aligned);
     NDArray* make_color_array(const std::shared_ptr<ob::ColorFrame>& color_frame,
                               const std::shared_ptr<ob::Frame>& color_rgb);
-    NDArray* make_depth_array(const std::shared_ptr<ob::DepthFrame>& frame);
+    NDArray* make_depth_array(const std::shared_ptr<ob::DepthFrame>& frame, bool aligned);
     void add_frame_attributes(NDArray* array, const std::shared_ptr<ob::Frame>& frame, OBFormat source_format,
                               NDColorMode_t color_mode);
     void set_array_params(NDArray* array, int addr, int unique_id, const epicsTimeStamp& time_stamp);

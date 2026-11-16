@@ -128,7 +128,7 @@ NDArray* OrbbecDriver::make_color_array(const std::shared_ptr<ob::ColorFrame>& c
     return array;
 }
 
-NDArray* OrbbecDriver::make_depth_array(const std::shared_ptr<ob::DepthFrame>& frame) {
+NDArray* OrbbecDriver::make_depth_array(const std::shared_ptr<ob::DepthFrame>& frame, bool aligned) {
     const OBFormat format = frame->getFormat();
     if (format != OB_FORMAT_Y16 && format != OB_FORMAT_Z16) {
         set_error("Unsupported depth format: " + format_name(format));
@@ -162,6 +162,9 @@ NDArray* OrbbecDriver::make_depth_array(const std::shared_ptr<ob::DepthFrame>& f
     array->pAttributeList->add("OrbbecDepthScale", "Millimeters per raw depth unit", NDAttrFloat32,
                                &depth_scale);
     array->pAttributeList->add("OrbbecDepthUnits", "Depth scale units", NDAttrString, depth_units);
+    epicsInt32 depth_aligned = aligned ? 1 : 0;
+    array->pAttributeList->add("OrbbecDepthAligned", "Depth aligned to color camera", NDAttrInt32,
+                               &depth_aligned);
     return array;
 }
 
@@ -186,7 +189,8 @@ void OrbbecDriver::set_array_params(NDArray* array, int addr, int unique_id, con
 
 asynStatus OrbbecDriver::publish_frame_pair(const std::shared_ptr<ob::ColorFrame>& color_frame,
                                             const std::shared_ptr<ob::Frame>& color_rgb,
-                                            const std::shared_ptr<ob::DepthFrame>& depth_frame) {
+                                            const std::shared_ptr<ob::DepthFrame>& depth_frame,
+                                            bool depth_aligned) {
     using ArrayGuard = std::unique_ptr<NDArray, void (*)(NDArray*)>;
     auto release = [](NDArray* value) { value->release(); };
 
@@ -196,7 +200,7 @@ asynStatus OrbbecDriver::publish_frame_pair(const std::shared_ptr<ob::ColorFrame
     }
     ArrayGuard color_guard(color_array, release);
 
-    NDArray* depth_array = make_depth_array(depth_frame);
+    NDArray* depth_array = make_depth_array(depth_frame, depth_aligned);
     if (depth_array == nullptr) {
         return asynError;
     }
@@ -263,6 +267,7 @@ void OrbbecDriver::acquisition_task() {
         bool operator_stopped = false;
         bool acquisition_complete = false;
         std::shared_ptr<ob::FormatConvertFilter> format_converter;
+        std::shared_ptr<ob::Align> align_filter;
         std::string error_message;
 
         try {
@@ -293,8 +298,10 @@ void OrbbecDriver::acquisition_task() {
                 std::shared_ptr<ob::FrameSet> frame_set = pipeline->waitForFrameset(100);
 
                 const bool stop_requested = epicsEventTryWait(stop_event_) == epicsEventWaitOK;
+                int depth_align = 0;
                 lock();
                 getIntegerParam(ADAcquire, &acquire);
+                getIntegerParam(depth_align_, &depth_align);
                 if (stop_requested || !acquire || shutting_down_) {
                     operator_stopped = !shutting_down_;
                     unlock();
@@ -304,6 +311,17 @@ void OrbbecDriver::acquisition_task() {
 
                 if (!frame_set) {
                     continue;
+                }
+                if (depth_align) {
+                    if (!align_filter) {
+                        align_filter = std::make_shared<ob::Align>(OB_STREAM_COLOR);
+                    }
+                    std::shared_ptr<ob::Frame> aligned = align_filter->process(frame_set);
+                    if (!aligned || !aligned->is<ob::FrameSet>()) {
+                        error_message = "Depth alignment failed";
+                        break;
+                    }
+                    frame_set = aligned->as<ob::FrameSet>();
                 }
                 std::shared_ptr<ob::Frame> color_raw = frame_set->getFrame(OB_FRAME_COLOR);
                 std::shared_ptr<ob::Frame> depth_raw = frame_set->getFrame(OB_FRAME_DEPTH);
@@ -335,7 +353,7 @@ void OrbbecDriver::acquisition_task() {
                 lock();
                 asynStatus status;
                 try {
-                    status = publish_frame_pair(color_frame, color_rgb, depth_frame);
+                    status = publish_frame_pair(color_frame, color_rgb, depth_frame, depth_align != 0);
                 } catch (...) {
                     unlock();
                     throw;
@@ -460,7 +478,7 @@ asynStatus OrbbecDriver::connect_device(const char* device_id) {
 }
 
 constexpr unsigned int MAX_ADDR = 2;
-constexpr unsigned int NUM_PARAMS = 7;
+constexpr unsigned int NUM_PARAMS = 8;
 
 OrbbecDriver::OrbbecDriver(const char* port_name, const char* device_id, int max_buffers, size_t max_memory,
                            int priority, int stack_size)
@@ -476,6 +494,7 @@ OrbbecDriver::OrbbecDriver(const char* port_name, const char* device_id, int max
     createParam("ORBBEC_DEVICE_VID", asynParamInt32, &device_vid_);
     createParam("ORBBEC_DEVICE_PID", asynParamInt32, &device_pid_);
     createParam("ORBBEC_LAST_ERROR", asynParamOctet, &last_error_);
+    createParam("ORBBEC_DEPTH_ALIGN", asynParamInt32, &depth_align_);
 
     setStringParam(device_selector_, device_id ? device_id : "");
     setStringParam(NDDriverVersion, driver_version);
@@ -484,6 +503,7 @@ OrbbecDriver::OrbbecDriver(const char* port_name, const char* device_id, int max
     setIntegerParam(ADImageMode, ADImageContinuous);
     setIntegerParam(ADNumImages, 1);
     setIntegerParam(ADNumImagesCounter, 0);
+    setIntegerParam(depth_align_, 1);
     setIntegerParam(COLOR_ADDR, NDArrayCounter, 0);
     setIntegerParam(COLOR_ADDR, NDNDimensions, 3);
     setIntegerParam(COLOR_ADDR, NDDataType, NDUInt8);
